@@ -8,6 +8,7 @@
 # Source function library.
 [ -f "/etc/rc.d/init.d/functions" ] && . /etc/rc.d/init.d/functions
 [ -z "$JAVA_HOME" -a -x /etc/profile.d/java.sh ] && . /etc/profile.d/java.sh
+export JAVA_HOME=/usr/java/latest
 
 
 # the name of the project, will also be used for the war file, log file, ...
@@ -44,7 +45,7 @@ start() {
     su $SERVICE_USER -c "nohup $SPRINGBOOTAPP_JAVA -jar \"$SPRINGBOOTAPP_WAR\"  >> \"$LOG\" 2>&1 &"
 
     while { pid_of_spring_boot > /dev/null ; } &&
-        ! { tail --lines=+$cnt "$LOG" | grep -q ' Started \S+ in' ; } ; do
+        ! { tail --lines=+$cnt "$LOG" | grep -q '.*Started\s\+\S\+\s\+in.*seconds' ; } ; do
         sleep 1
     done
 
