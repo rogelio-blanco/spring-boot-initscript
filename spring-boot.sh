@@ -47,7 +47,7 @@ start() {
     echo -n $"Starting $PROJECT_NAME: "
 
     cd "$SPRINGBOOTAPP_HOME"
-    su $SERVICE_USER -c "nohup $SPRINGBOOTAPP_JAVA -jar \"$SPRINGBOOTAPP_WAR\" --spring.profiles.active=$SPRINGBOOTAPP_PROFILE >> \"$LOG\" 2>&1 &"
+    su $SERVICE_USER -c "nohup $SPRINGBOOTAPP_JAVA -jar -Dspring.profiles.active=$SPRINGBOOTAPP_PROFILE \"$SPRINGBOOTAPP_WAR\" >> \"$LOG\" 2>&1 &"
 
     while { pid_of_spring_boot > /dev/null ; } &&
         ! { tail --lines=+$cnt "$LOG" | grep -q '.*Started\s\+\S\+\s\+in.*seconds' ; } ; do
